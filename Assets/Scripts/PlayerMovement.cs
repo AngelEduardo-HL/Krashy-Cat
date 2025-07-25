@@ -1,44 +1,54 @@
 using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Animator))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
     public float speed = 5f;
     public float gravity = -9.81f;
     public float jumpHeight = 2f;
-
     public float rotateSpeed = 200f;
+
     private CharacterController controller;
+    private Animator animator;
     private Vector3 velocity;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        Vector3 inputDir = Vector3.zero;
-        if (Input.GetKey(KeyCode.W)) inputDir += transform.forward;
-        if (Input.GetKey(KeyCode.S)) inputDir -= transform.forward;
-        if (Input.GetKey(KeyCode.A)) inputDir -= transform.right;
-        if (Input.GetKey(KeyCode.D)) inputDir += transform.right;
-        if(Input.GetKey(KeyCode.Space) && controller.isGrounded)
-            velocity.y = Mathf.Sqrt(jumpHeight-2 * gravity);
 
-        if (inputDir.sqrMagnitude > 0.01f)
+        //Movimiento del jugador
+        float turnInput = Input.GetAxis("Horizontal");
+        transform.Rotate(0f, turnInput * rotateSpeed * Time.deltaTime, 0f);
+
+        float forwardInput = Input.GetAxis("Vertical");
+        Vector3 move = transform.forward * forwardInput * speed;
+
+        bool isWalking = Mathf.Abs(forwardInput) > 0.1f;
+
+        if (Input.GetButtonDown("Jump") && controller.isGrounded)
         {
-            Quaternion targetRot =  Quaternion.LookRotation(inputDir);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, rotateSpeed * Time.deltaTime);
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-
-
-        Vector3 move = inputDir.normalized * speed;
 
         if (controller.isGrounded && velocity.y < 0f)
             velocity.y = -1f;
         velocity.y += gravity * Time.deltaTime;
+        move.y = velocity.y;
 
-        controller.Move((move + velocity) * Time.deltaTime);
+        controller.Move(move * Time.deltaTime);
+
+
+        //Animaciones
+        bool running = controller.isGrounded && Mathf.Abs(forwardInput) > 0.1f;
+        bool jumping = !controller.isGrounded;
+        animator.SetBool("Running", running);
+        animator.SetBool("Jumping", jumping);
+        //Idle ocurre cuando Run es igual a falso y el de saltar tambien pa no hacer desmadre
     }
 }
