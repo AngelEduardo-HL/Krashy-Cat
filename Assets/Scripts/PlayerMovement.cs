@@ -53,6 +53,6 @@ public class PlayerMovement : MonoBehaviour
         bool jumping = !controller.isGrounded;
         animator.SetBool("Running", running);
         animator.SetBool("Jumping", jumping);
-        //Idle se activa cuando el Running y Jumping son falsos pa no hacer tanto desmadreS
+        //Idle se activa cuando el Running y Jumping son falsos pa no hacer tanto desmadre
     }
 }
