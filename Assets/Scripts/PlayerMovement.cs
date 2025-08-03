@@ -8,6 +8,12 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = -9.81f;
     public float jumpHeight = 2f;
 
+    [Header("Attack")]
+    public float attackRadius = 2f;
+    public float attackCooldown = 1f;
+    private bool canAttack = true;
+
+    [Header("Rotation")]
     public float rotateSpeed = 200f;
     private CharacterController controller;
     private Vector3 velocity;
@@ -21,7 +27,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        PlayerMove();
+        PlayerAttack();
+    }
 
+    void PlayerMove()
+    {
         //Movimiento
         Vector3 inputDir = Vector3.zero;
 
@@ -54,5 +65,38 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("Running", running);
         animator.SetBool("Jumping", jumping);
         //Idle se activa cuando el Running y Jumping son falsos pa no hacer tanto desmadre
+    }
+    void PlayerAttack()
+    {
+        //Ataque con click izquierdo
+        if (Input.GetKeyDown(KeyCode.Mouse0) && canAttack)
+        {
+            canAttack = false;
+            animator.SetTrigger("Attack");
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRadius); 
+            foreach (var col in hitColliders)
+            {
+                if (col.CompareTag("Enemy") || col.CompareTag("Box")) //Cualquier Objeto con el tag "Enemy" o "Box" será destruido al ser atacado
+                {
+                    Destroy(col.gameObject);
+                    Debug.Log("Jugador Destruyo a: " + col.name);
+                }
+            }
+            StartCoroutine(ResetAttackCooldown());
+
+        }
+    }
+
+    private System.Collections.IEnumerator ResetAttackCooldown()
+    {
+        yield return new WaitForSeconds(attackCooldown);
+        canAttack = true;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        //Visualizar el rango de ataque
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRadius);
     }
 }
