@@ -55,4 +55,20 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("Jumping", jumping);
         //Idle se activa cuando el Running y Jumping son falsos pa no hacer tanto desmadreS
     }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        CajasRompibles caja = hit.collider.GetComponent<CajasRompibles>();
+
+        if (caja != null)
+        {
+            if (velocity.y < -1f) 
+            {
+                caja.TakeDamage(1);
+
+                // Rebote adicional al romper la caja
+                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            }
+        }
+    }
 }
