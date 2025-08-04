@@ -9,6 +9,7 @@ TagManager:
   - WaterPuddle
   - Enemy
   - Box
+  - Wall
   layers:
   - Default
   - TransparentFX
