@@ -12,7 +12,8 @@ public class PlayerHP : MonoBehaviour
 
     [Header("Screen Shake")]
     public ScreenShake screenShake;
-    public enum ShakeType { Light, Medium, Heavy }
+    public GameObject Enemy1;
+    public GameObject Enemy2;
 
     void Start()
     {
@@ -32,12 +33,15 @@ public class PlayerHP : MonoBehaviour
             CurrentLives = 0;
             SceneManager.LoadScene("DeathScene"); //Cuando las vidas son 0 se carga la Escena de muerte
         }
-        //switch(type)
-        //{
-        //    case DamageType.Light:
-        //        screenShake.Shake(0.2f, 1, 0.2f); //Si el daño es ligero, se hace un shake ligero
-        //        break;
-        //}
+        //Screen Shake segun que enemigo colisiona con el jugador
+        if (Enemy1.activeInHierarchy) //Si el enemigo 1 esta activo
+        {
+            screenShake.ShakeCamera(0.3f, 1.5f, 1.5f); //Sacude la camara por 0.2 segundos con amplitud y frecuencia de 1
+        }
+        else if (Enemy2.activeInHierarchy) //Si el enemigo 2 esta activo
+        {
+            screenShake.ShakeCamera(0.5f, 4f, 4f); //Sacude la camara por 0.3 segundos
+        }
     }
 
     //Para colisiones Fisicas Hitbox

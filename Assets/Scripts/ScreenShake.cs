@@ -17,7 +17,7 @@ public class ScreenShake : MonoBehaviour
         perlin.FrequencyGain = 0;
     }
 
-    public void ShakeCamera(float duration)
+    public void ShakeCamera(float duration, float shakeAmplitude, float shakeFrequency)
     {
         perlin.AmplitudeGain = shakeAmplitude; // Establece la amplitud del sacudón
         perlin.FrequencyGain = shakeFrequency; // Establece la frecuencia del sacudón

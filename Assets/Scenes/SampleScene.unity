@@ -3693,6 +3693,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6161300530798987367, guid: 1ebdb0dbedd07fb4cbe84a1f4643a336, type: 3}
+      propertyPath: Enemy1
+      value: 
+      objectReference: {fileID: 1190669821}
+    - target: {fileID: -6161300530798987367, guid: 1ebdb0dbedd07fb4cbe84a1f4643a336, type: 3}
+      propertyPath: Enemy2
+      value: 
+      objectReference: {fileID: 2000000374}
+    - target: {fileID: -6161300530798987367, guid: 1ebdb0dbedd07fb4cbe84a1f4643a336, type: 3}
+      propertyPath: screenShake
+      value: 
+      objectReference: {fileID: 1116734745}
     - target: {fileID: 4938295080169583016, guid: 1ebdb0dbedd07fb4cbe84a1f4643a336, type: 3}
       propertyPath: m_Name
       value: Player
@@ -3749,10 +3761,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4938295080169583016, guid: 1ebdb0dbedd07fb4cbe84a1f4643a336, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1116734735}
+      addedObject: {fileID: 1116734740}
     - targetCorrespondingSourceObject: {fileID: 4938295080169583016, guid: 1ebdb0dbedd07fb4cbe84a1f4643a336, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1116734740}
+      addedObject: {fileID: 1116734745}
   m_SourcePrefab: {fileID: 100100000, guid: 1ebdb0dbedd07fb4cbe84a1f4643a336, type: 3}
 --- !u!4 &1116734733 stripped
 Transform:
@@ -3764,21 +3776,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4938295080169583016, guid: 1ebdb0dbedd07fb4cbe84a1f4643a336, type: 3}
   m_PrefabInstance: {fileID: 1116734732}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1116734735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1116734734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dee32edb74304f34c9e7b00ec28b1754, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxLives: 3
-  CurrentLives: 0
-  screenShake: {fileID: 0}
 --- !u!114 &1116734740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3794,6 +3791,22 @@ MonoBehaviour:
   fishAmmountValue: {fileID: 615334608}
   shieldState: {fileID: 164960258}
   fishAmmount: 0
+--- !u!114 &1116734745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116734734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cb45bfa9ace7c04496e5622ed001a76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeTime: 0.5
+  shakeAmplitude: 0.5
+  shakeFrequency: 2
+  perlin: {fileID: 2111688240}
 --- !u!1 &1120644764
 GameObject:
   m_ObjectHideFlags: 0
@@ -4240,6 +4253,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1168443626}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1190669821 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1946973217065449423, guid: a6026f1b8568e994d8b3ea88d686180f, type: 3}
+  m_PrefabInstance: {fileID: 320783399}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1240213803
 GameObject:
   m_ObjectHideFlags: 0
@@ -6393,6 +6411,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1996272625}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2000000374 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2336794978908236590, guid: a1aab41eaa749ad4faf6709ab4e7d1cf, type: 3}
+  m_PrefabInstance: {fileID: 2006183040}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2006183040
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6401,6 +6424,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 179453656033990643, guid: a1aab41eaa749ad4faf6709ab4e7d1cf, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1116734733}
     - target: {fileID: 179453656033990643, guid: a1aab41eaa749ad4faf6709ab4e7d1cf, type: 3}
       propertyPath: detectionRange
       value: 1.57
