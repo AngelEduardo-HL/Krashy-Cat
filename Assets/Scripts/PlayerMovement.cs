@@ -115,4 +115,20 @@ public class PlayerMovement : MonoBehaviour
             GetComponent<IngameUIUpdate>().ChangeShieldState();
         }
     }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        CajasRompibles caja = hit.collider.GetComponent<CajasRompibles>();
+
+        if (caja != null)
+        {
+            if (velocity.y < -1f) 
+            {
+                caja.TakeDamage(1);
+
+                // Rebote adicional al romper la caja
+                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            }
+        }
+    }
 }
