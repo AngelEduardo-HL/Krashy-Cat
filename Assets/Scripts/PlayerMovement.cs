@@ -104,13 +104,15 @@ public class PlayerMovement : MonoBehaviour
     {
         if (hit.gameObject.CompareTag("Fish"))
         {
-            //Aquí ponemos que se añada uno al valor actual de pescaditos
             Destroy(hit.gameObject);
+            GetComponent<IngameUIUpdate>().AddFish();
+            GetComponent<IngameUIUpdate>().UpdateScore();
+            Debug.Log("Fish Picked");
         }
         if (hit.gameObject.CompareTag("Mask"))
         {
-            //Aquí ponemos que se active el escudo
             Destroy(hit.gameObject);
+            GetComponent<IngameUIUpdate>().ChangeShieldState();
         }
     }
 }
