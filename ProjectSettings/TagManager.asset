@@ -7,6 +7,8 @@ TagManager:
   - Fish
   - Mask
   - WaterPuddle
+  - Enemy
+  - Box
   layers:
   - Default
   - TransparentFX
