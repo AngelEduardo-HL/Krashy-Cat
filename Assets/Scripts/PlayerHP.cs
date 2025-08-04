@@ -1,14 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class PlayerHP : MonoBehaviour
 {
     [Header("Vidas")]
     public int MaxLives = 3;
     public int CurrentLives;
+    private bool isInvincible = false;
 
-    private bool isInvincible  = false;
+    [Header("Screen Shake")]
+    public ScreenShake screenShake;
+    public enum ShakeType { Light, Medium, Heavy }
 
     void Start()
     {
@@ -28,6 +32,12 @@ public class PlayerHP : MonoBehaviour
             CurrentLives = 0;
             SceneManager.LoadScene("DeathScene"); //Cuando las vidas son 0 se carga la Escena de muerte
         }
+        //switch(type)
+        //{
+        //    case DamageType.Light:
+        //        screenShake.Shake(0.2f, 1, 0.2f); //Si el daño es ligero, se hace un shake ligero
+        //        break;
+        //}
     }
 
     //Para colisiones Fisicas Hitbox
