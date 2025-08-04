@@ -99,4 +99,18 @@ public class PlayerMovement : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRadius);
     }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.CompareTag("Fish"))
+        {
+            //Aquí ponemos que se añada uno al valor actual de pescaditos
+            Destroy(hit.gameObject);
+        }
+        if (hit.gameObject.CompareTag("Mask"))
+        {
+            //Aquí ponemos que se active el escudo
+            Destroy(hit.gameObject);
+        }
+    }
 }
