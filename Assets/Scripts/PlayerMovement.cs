@@ -114,15 +114,12 @@ public class PlayerMovement : MonoBehaviour
             Destroy(hit.gameObject);
             GetComponent<IngameUIUpdate>().ChangeShieldState();
         }
-    }
 
-    void OnControllerColliderHit(ControllerColliderHit hit)
-    {
         CajasRompibles caja = hit.collider.GetComponent<CajasRompibles>();
 
         if (caja != null)
         {
-            if (velocity.y < -1f) 
+            if (velocity.y < -1f)
             {
                 caja.TakeDamage(1);
 
