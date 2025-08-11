@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
         bool isWalking = Mathf.Abs(forwardInput) > 0.1f;
 
         if (Input.GetKey(KeyCode.Space) && controller.isGrounded)
-            velocity.y = Mathf.Sqrt(jumpHeight - 2 * gravity);
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
 
         if (inputDir.sqrMagnitude > 0.01f)
         {
