@@ -4,38 +4,33 @@ public class ComplexEnemy : MonoBehaviour
 {
     [Header("Patrullaje")]
     public float speed = 3f;
-    public float changeDirectionTime = 3f;
     public float waitTime = 1.5f;
+    public Transform[] patrolPoints; 
+    private int currentPointIndex = 0;
 
     [Header("Detección del jugador")]
     public Transform player;
-    public float detectionRange = 8f; //Rango de deteccion
-
-    [Header("Timer de patrullaje")]
-    private float timer;
-    private int currentDirection = 0;
-    private Vector3[] directions;
+    public float detectionRange = 8f;
+    public float stopChaseDistance = 1.5f; 
 
     private bool isChasing = false;
     private bool isWaiting = false;
     private float waitTimer = 0f;
 
+    private Animator animator;
+
     void Start()
     {
-        timer = changeDirectionTime;
+        animator = GetComponent<Animator>();
 
-        directions = new Vector3[]  //Direcciones a las que va a ir el enemigo creando un patron con forma de rombo :)  <>
+        if (patrolPoints.Length > 0)
         {
-            Vector3.forward + Vector3.right,
-            Vector3.back + Vector3.right,
-            Vector3.back + Vector3.left,
-            Vector3.forward + Vector3.left
-        };
+            transform.position = patrolPoints[0].position;
+        }
     }
 
     void Update()
     {
-        //Checa si el jugador esta en su rango para perseguirlo
         if (player != null && IsPlayerInRange())
         {
             isChasing = true;
@@ -44,22 +39,22 @@ public class ComplexEnemy : MonoBehaviour
         else if (isChasing && Vector3.Distance(transform.position, player.position) > detectionRange * 1.5f)
         {
             isChasing = false;
-            timer = changeDirectionTime; // Reinicia timer al volver a patrullar
         }
 
-        if (isWaiting) //Se espera un poco 
+        if (isWaiting) //Checa si esta esperando
         {
+            PlayAnimation(idle: true, walk: false, run: false);
+
             waitTimer -= Time.deltaTime;
             if (waitTimer <= 0f)
             {
                 isWaiting = false;
-                NextDirection();
-                timer = changeDirectionTime;
+                GoToNextPoint();
             }
             return;
         }
 
-        if (isChasing)
+        if (isChasing) //Checa si persigue
         {
             ChasePlayer();
         }
@@ -69,39 +64,49 @@ public class ComplexEnemy : MonoBehaviour
         }
     }
 
-    void Patrol() //El enemigo hace su patrullaje
+    void Patrol() //Se mueve patrullando en cada waypoint
     {
-        Vector3 moveDir = directions[currentDirection].normalized;
-        transform.Translate(moveDir * speed * Time.deltaTime);
+        if (patrolPoints.Length == 0) return;
 
-        //Timer para que no patrulle infinitamente si no colisiona
-        timer -= Time.deltaTime;
-        if (timer <= 0f)
+        Transform targetPoint = patrolPoints[currentPointIndex];
+        MoveTowards(targetPoint.position, speed, false); // Rotación instantánea en patrulla
+
+        PlayAnimation(idle: false, walk: true, run: false);
+
+        if (Vector3.Distance(transform.position, targetPoint.position) < 0.2f)
         {
             StartWaiting();
         }
     }
 
-    void ChasePlayer()
+    void ChasePlayer() //Persigue al jugador
     {
-        Vector3 direction = (player.position - transform.position).normalized;
-        transform.Translate(direction * speed * Time.deltaTime);
-        RotateTowards(direction);
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        if (distanceToPlayer > stopChaseDistance)
+        {
+            MoveTowards(player.position, speed, true);
+            PlayAnimation(idle: false, walk: false, run: true);
+        }
+        else
+        {
+            PlayAnimation(idle: true, walk: false, run: false);
+        }
     }
 
-    void StartWaiting()
+
+    void MoveTowards(Vector3 target, float moveSpeed, bool smoothRotation) //Se mueve
     {
-        isWaiting = true;
-        waitTimer = waitTime;
+        Vector3 direction = (target - transform.position).normalized;
+        transform.position += direction * moveSpeed * Time.deltaTime;
+
+        if (smoothRotation)
+            RotateTowardsSmooth(direction); 
+        else
+            RotateTowardsInstant(direction); 
     }
 
-    void NextDirection()//Va hacia el siguiente destino
-    {
-        currentDirection = (currentDirection + 1) % directions.Length;
-        RotateTowards(directions[currentDirection]);
-    }
-
-    void RotateTowards(Vector3 direction) //Rota, sirve para las animaciones
+    void RotateTowardsSmooth(Vector3 direction) //Gira hacia el jugador de manera suave
     {
         if (direction != Vector3.zero)
         {
@@ -110,14 +115,35 @@ public class ComplexEnemy : MonoBehaviour
         }
     }
 
-    bool IsPlayerInRange() //Persigue al jugador
+
+    void RotateTowardsInstant(Vector3 direction) //Gira hacia los waypoints
+    {
+        if (direction != Vector3.zero)
+        {
+            Quaternion lookRot = Quaternion.LookRotation(direction);
+            transform.rotation = lookRot; // Gira instantáneamente
+        }
+    }
+
+    void StartWaiting() //Se espera antes de seguir patrullando
+    {
+        isWaiting = true;
+        waitTimer = waitTime;
+    }
+
+    void GoToNextPoint() //Va al siguiente punto
+    {
+        currentPointIndex = (currentPointIndex + 1) % patrolPoints.Length;
+    }
+
+    bool IsPlayerInRange() //Checa si el player esta dentro del rango
     {
         float distance = Vector3.Distance(transform.position, player.position);
         if (distance < detectionRange)
         {
-            // Detecta si hay obstáculos usando Raycast
             Vector3 dirToPlayer = (player.position - transform.position).normalized;
             Ray ray = new Ray(transform.position + Vector3.up * 0.5f, dirToPlayer);
+
             if (Physics.Raycast(ray, out RaycastHit hit, detectionRange))
             {
                 return hit.transform == player;
@@ -126,18 +152,18 @@ public class ComplexEnemy : MonoBehaviour
         return false;
     }
 
-    void OnCollisionEnter(Collision collision) //Checa si colisiono para cambiar la direccion
+    void PlayAnimation(bool idle, bool walk, bool run) //Animaciones
     {
-        if (!isChasing && collision.gameObject.CompareTag("Wall"))
-        {
-            NextDirection();
-            timer = changeDirectionTime;
-        }
+        animator.SetBool("Idle", idle);
+        animator.SetBool("Walk", walk);
+        animator.SetBool("Run", run);
     }
 
-    void OnDrawGizmosSelected()//Se ve el gizmos, sirve para cuando se coloquen los enemigos y se haga el test con el jugador
+    void OnDrawGizmosSelected() //Gizmo para saber el rango para cuando se acerque el player
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
+
     }
+
 }
