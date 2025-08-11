@@ -15,6 +15,9 @@ public class PlayerHP : MonoBehaviour
     public GameObject Enemy1;
     public GameObject Enemy2;
 
+    [Header("FreezeFrame")]
+    public FreezeFrame freezeFrame;
+
     void Start()
     {
         CurrentLives = MaxLives;
@@ -28,9 +31,15 @@ public class PlayerHP : MonoBehaviour
 
         Invoke(nameof(ResetInvincibility), 2f); //El jugador sera invencible por 2 segundos
 
+        if (freezeFrame != null) //Si el FreezeFrame esta activo
+        {
+            freezeFrame.FreezeTime(); //Congela el tiempo por unos segundos
+        }
+
         if (CurrentLives <= 0)
         {
             CurrentLives = 0;
+            Time.timeScale = 1; //Asegura que el tiempo se reanude al morir
             SceneManager.LoadScene("DeathScene"); //Cuando las vidas son 0 se carga la Escena de muerte
         }
         //Screen Shake segun que enemigo colisiona con el jugador
