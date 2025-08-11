@@ -4,33 +4,40 @@ public class SimpleEnemy : MonoBehaviour
 {
     public float speed = 3f;
     public float changeDirectionTime = 3f;
-    public float waitTime = 1.5f; // Tiempo que espera antes de cambiar de dirección
+    public float waitTime = 1.5f;
 
     private float timer;
-    private Vector3 direction = Vector3.right;
+    private Vector3 direction = Vector3.forward;
     private bool isWaiting = false;
     private float waitTimer = 0f;
+
+    private Animator animator;
 
     void Start()
     {
         timer = changeDirectionTime;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
         if (isWaiting)
         {
+            animator.SetBool("Walk", false);
+            animator.SetBool("Idle", true);
             waitTimer -= Time.deltaTime;
             if (waitTimer <= 0f)
             {
-                isWaiting = false;
                 FlipDirection(); //Cuando termina de esperar, se voltea
                 timer = changeDirectionTime;
+                isWaiting = false;
             }
             return;
         }
 
         transform.Translate(direction * speed * Time.deltaTime);
+        animator.SetBool("Walk", true);
+        animator.SetBool("Idle", false);
 
         // Temporizador
         timer -= Time.deltaTime;
@@ -50,17 +57,16 @@ public class SimpleEnemy : MonoBehaviour
 
     void StartWaiting() //Espera unos segundos antes de cambiar de direccion
     {
+
         isWaiting = true;
         waitTimer = waitTime;
     }
 
-    void FlipDirection() //Se voltea el enemigo, sirve para la animacion
+    void FlipDirection() //Se voltea el enemigo, sirve para la animacion y movimiento
     {
-        direction *= -1f;
-
-        // Voltea visualmente el sprite cambiando el localScale.x
-        Vector3 scale = transform.localScale;
-        scale.x = Mathf.Sign(direction.x) * Mathf.Abs(scale.x); // Asegura que se voltee correctamente
-        transform.localScale = scale;
+        Vector3 rot = transform.rotation.eulerAngles;
+        rot.y += 180f;
+        transform.rotation = Quaternion.Euler(rot);
     }
+
 }
