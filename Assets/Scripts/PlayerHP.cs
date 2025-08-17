@@ -18,9 +18,11 @@ public class PlayerHP : MonoBehaviour
     [Header("FreezeFrame")]
     public FreezeFrame freezeFrame;
 
+
     void Start()
     {
         CurrentLives = MaxLives;
+
     }
 
     public void TakeDamage() //Servira aqui mas a delante para actualizar el UI

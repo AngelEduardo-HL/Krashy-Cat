@@ -36,6 +36,6 @@ public class MeneController : MonoBehaviour
 
     public void CerrarJuego()
     {
-        
+        Application.Quit();
     }
 }
