@@ -8,7 +8,7 @@ public class PlayerHP : MonoBehaviour
     [Header("Vidas")]
     public int MaxLives = 3;
     public int CurrentLives;
-    private bool isInvincible = false;
+    public bool isInvincible = false;
 
     [Header("Screen Shake")]
     public ScreenShake screenShake;
