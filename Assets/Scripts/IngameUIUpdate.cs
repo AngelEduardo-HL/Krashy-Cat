@@ -10,6 +10,9 @@ public class IngameUIUpdate : MonoBehaviour
 
     void Start()
     {
+        GetComponent<PlayerHP>();
+
+        fishAmmountValue.fontSize = 36f;
         fishAmmountValue.text = "0";
         shieldState.text = "No";
         fishAmmount = 0;
@@ -17,9 +20,9 @@ public class IngameUIUpdate : MonoBehaviour
 
     public void AddFish()
     {
+        //IncreaseFontSize(36f);
         fishAmmount++;
-        Debug.Log(fishAmmount);
-
+        //DecreaseFontSize(36f);
     }
     
     public void UpdateScore()
@@ -29,6 +32,17 @@ public class IngameUIUpdate : MonoBehaviour
 
     public void ChangeShieldState()
     {
+        GetComponent<PlayerHP>().isInvincible = true;
+        Debug.Log("Invincibility State is" + GetComponent<PlayerHP>().isInvincible);
         shieldState.text = "Yes";
+    }
+
+    public void IncreaseFontSize(float fontSizeVariation)
+    {
+        fishAmmountValue.fontSize += fontSizeVariation;
+    }
+    public void DecreaseFontSize(float fontSizeVariation)
+    {
+        fishAmmountValue.fontSize -= fontSizeVariation;
     }
 }
