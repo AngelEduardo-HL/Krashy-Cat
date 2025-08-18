@@ -19,6 +19,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 velocity;
     private Animator animator;
 
+    [Header("Sound")]
+    public SoundManager playerSoundManager;
+    public SoundManager enemiesSoundManager;
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -45,7 +48,11 @@ public class PlayerMovement : MonoBehaviour
         bool isWalking = Mathf.Abs(forwardInput) > 0.1f;
 
         if (Input.GetKey(KeyCode.Space) && controller.isGrounded)
+        {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            playerSoundManager?.PlayRandomPitch("Jump");
+        }
+
 
         if (inputDir.sqrMagnitude > 0.01f)
         {
@@ -55,7 +62,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (controller.isGrounded && velocity.y < 0f)
             velocity.y = -1f;
-        velocity.y += gravity * Time.deltaTime;
+        {
+            velocity.y += gravity * Time.deltaTime;
+        }
+
 
         controller.Move((move + velocity) * Time.deltaTime);
 
@@ -72,12 +82,24 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0) && canAttack)
         {
             canAttack = false;
-            animator.SetTrigger("Attack");
+            //animator.SetTrigger("Attack");
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRadius); 
             foreach (var col in hitColliders)
             {
                 if (col.CompareTag("Enemy") || col.CompareTag("Box")) //Cualquier Objeto con el tag "Enemy" o "Box" será destruido al ser atacado
                 {
+                    if(col.gameObject.layer == 6)
+                    {
+                        enemiesSoundManager?.PlayRandomPitch("HenDamage");
+                    }
+                    else if (col.gameObject.layer == 7)
+                    {
+                        enemiesSoundManager?.PlayRandomPitch("DogDamage");
+                    }
+                    else if (col.gameObject.layer == 8)
+                    {
+                        enemiesSoundManager?.PlayRandomPitch("Boxes");
+                    }
                     Destroy(col.gameObject);
                     Debug.Log("Jugador Destruyo a: " + col.name);
                 }
@@ -107,11 +129,13 @@ public class PlayerMovement : MonoBehaviour
             Destroy(hit.gameObject);
             GetComponent<IngameUIUpdate>().AddFish();
             GetComponent<IngameUIUpdate>().UpdateScore();
+            playerSoundManager?.PlayRandomPitch("Fish");
             Debug.Log("Fish Picked");
         }
         if (hit.gameObject.CompareTag("Mask"))
         {
             Destroy(hit.gameObject);
+            playerSoundManager?.PlayRandomPitch("Fish"); //Se le va a agregar un sonido diferente
             GetComponent<IngameUIUpdate>().ChangeShieldState();
         }
 
@@ -122,6 +146,7 @@ public class PlayerMovement : MonoBehaviour
             if (velocity.y < -1f)
             {
                 caja.TakeDamage(1);
+                playerSoundManager?.PlayRandomPitch("Boxes");
 
                 // Rebote adicional al romper la caja
                 velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);

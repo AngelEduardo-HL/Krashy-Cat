@@ -18,6 +18,10 @@ public class PlayerHP : MonoBehaviour
     [Header("FreezeFrame")]
     public FreezeFrame freezeFrame;
 
+    [Header("Sound")]
+    public SoundManager playerSoundManager;
+    public SoundManager enemiesSoundManager;
+
 
     void Start()
     {
@@ -70,6 +74,22 @@ public class PlayerHP : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             TakeDamage(); //Si el jugador entra en el trigger de un enemigo, se le quita una vida
+        }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if(other.gameObject.layer == 6)
+        {
+            enemiesSoundManager?.PlayRandomPitch("HenAttack");
+        }
+        else if (other.gameObject.layer == 7)
+        {
+            enemiesSoundManager?.PlayRandomPitch("DogAttack");
+        }
+        else if (other.gameObject.layer == 8)
+        {
+            Debug.Log("Sprinkler");
         }
     }
 
