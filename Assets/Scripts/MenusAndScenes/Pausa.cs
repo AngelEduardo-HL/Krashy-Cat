@@ -1,6 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class Pausa : MonoBehaviour
 {
@@ -10,11 +11,14 @@ public class Pausa : MonoBehaviour
     private bool gamePaused;
     private const float TWEEN_TIME = 0.3f;
     private Tween pauseTween;
+    public SoundManager uiSoundManager;
+    public AudioMixerGroup audioMixerGroupMaster, audioMixerGroupMusic, audioMixerGroupSFX;
 
     void Start()
     {
         gamePaused = false;
         canvasGroup.alpha = 0;
+        uiSoundManager?.FadeInSound("GameMusic", 2);
     }
 
 
@@ -23,6 +27,15 @@ public class Pausa : MonoBehaviour
         if (Input.GetKeyDown(pausaKey))
         {
             TogglePause(!gamePaused);
+            if (gamePaused)
+            {
+                uiSoundManager?.FadeOutSound("GameMusic", 1);
+            }
+            else
+            {
+                uiSoundManager?.FadeInSound("GameMusic", 1);
+            }
+
         }
     }
 
@@ -41,4 +54,23 @@ public class Pausa : MonoBehaviour
         });
         gamePaused = pausado;
     }
+
+    public void SetMasterVolume(float volume)
+    {
+        audioMixerGroupMaster.audioMixer.SetFloat("VolumeMaster", volume);
+    }
+
+    public void SetMasterMusic(float volume)
+    {
+        audioMixerGroupMusic.audioMixer.SetFloat("VolumeMusic", volume);
+    }
+
+    public void SetSFXVolume(float volume)
+    {
+        audioMixerGroupSFX.audioMixer.SetFloat("VolumeSFX", volume);
+    }
+
+
+
+
 }
