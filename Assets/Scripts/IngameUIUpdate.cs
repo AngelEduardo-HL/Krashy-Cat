@@ -10,8 +10,7 @@ public class IngameUIUpdate : MonoBehaviour
 
     void Start()
     {
-        GetComponent<PlayerHP>();
-
+        GetComponent<PlayerHP>(); // mantiene tu patrón
         fishAmmountValue.fontSize = 36f;
         fishAmmountValue.text = "0";
         shieldState.text = "No";
@@ -20,11 +19,17 @@ public class IngameUIUpdate : MonoBehaviour
 
     public void AddFish()
     {
-        //IncreaseFontSize(36f);
         fishAmmount++;
-        //DecreaseFontSize(36f);
+
+        // Al juntar 100 peces, ganar 1 vida y restar 100 del contador
+        if (fishAmmount >= 100)
+        {
+            fishAmmount -= 100;
+            var hp = GetComponent<PlayerHP>();
+            if (hp != null) hp.AddLife(1);
+        }
     }
-    
+
     public void UpdateScore()
     {
         fishAmmountValue.text = fishAmmount.ToString();
