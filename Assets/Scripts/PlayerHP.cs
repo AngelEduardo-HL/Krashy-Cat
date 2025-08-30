@@ -48,6 +48,9 @@ public class PlayerHP : MonoBehaviour
             Time.timeScale = 1; //Asegura que el tiempo se reanude al morir
             SceneManager.LoadScene("DeathScene"); //Cuando las vidas son 0 se carga la Escena de muerte
         }
+
+        CheckpointManager.Instance?.RespawnPlayer(gameObject); //Respawnea al jugador en el ultimo checkpoint
+
         //Screen Shake segun que enemigo colisiona con el jugador
         if (Enemy1.activeInHierarchy) //Si el enemigo 1 esta activo
         {
@@ -98,7 +101,7 @@ public class PlayerHP : MonoBehaviour
         return CurrentLives;
     }
 
-    public void ResetLives() //Es para mas adelante pa hacer los checkpoints
+    public void ResetLives()
     {
         CurrentLives = MaxLives;
     }
@@ -106,5 +109,10 @@ public class PlayerHP : MonoBehaviour
     private void ResetInvincibility()
     {
         isInvincible  = false; //Resetea la invencibilidad
+    }
+    public void AddLife(int amount = 1)
+    {
+        CurrentLives = Mathf.Clamp(CurrentLives + amount, 0, MaxLives);
+        
     }
 }

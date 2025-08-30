@@ -169,4 +169,18 @@ public class PlayerMovement : MonoBehaviour
         //    }
         //}
     }
+    public void ResetVerticalVelocity()
+    {
+        // 'velocity' ya existe en tu script
+        // un empuje leve hacia abajo mantiene el contacto con el suelo
+        var v = typeof(PlayerMovement)
+                .GetField("velocity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                .GetValue(this);
+        Vector3 vel = (Vector3)v;
+        vel.y = -1f;
+        typeof(PlayerMovement)
+            .GetField("velocity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .SetValue(this, vel);
+    }
+
 }
