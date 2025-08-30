@@ -3125,6 +3125,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7245248825838985457, guid: 24441b3c226520e458e311b7f8730548, type: 3}
+      propertyPath: enemiesSoundManager
+      value: 
+      objectReference: {fileID: 859631482}
     - target: {fileID: 8363250751306610855, guid: 24441b3c226520e458e311b7f8730548, type: 3}
       propertyPath: m_Name
       value: 'Sprinkler '
@@ -5803,6 +5807,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7245248825838985457, guid: 24441b3c226520e458e311b7f8730548, type: 3}
+      propertyPath: enemiesSoundManager
+      value: 
+      objectReference: {fileID: 859631482}
     - target: {fileID: 8363250751306610855, guid: 24441b3c226520e458e311b7f8730548, type: 3}
       propertyPath: m_Name
       value: Sprinkler
@@ -6490,6 +6498,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7245248825838985457, guid: 24441b3c226520e458e311b7f8730548, type: 3}
+      propertyPath: enemiesSoundManager
+      value: 
+      objectReference: {fileID: 859631482}
     - target: {fileID: 8363250751306610855, guid: 24441b3c226520e458e311b7f8730548, type: 3}
       propertyPath: m_Name
       value: 'Sprinkler '
@@ -7641,8 +7653,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.27152827, y: 0.31595826, z: 0.4703645}
-  m_Center: {x: 0.038955495, y: 0.14308226, z: -0.024516076}
+  m_Size: {x: 0.27152827, y: 0.31595826, z: 0.537567}
+  m_Center: {x: 0.038955495, y: 0.14308226, z: 0.009085178}
 --- !u!54 &1116734751
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8311,6 +8323,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7245248825838985457, guid: 24441b3c226520e458e311b7f8730548, type: 3}
+      propertyPath: enemiesSoundManager
+      value: 
+      objectReference: {fileID: 859631482}
     - target: {fileID: 8363250751306610855, guid: 24441b3c226520e458e311b7f8730548, type: 3}
       propertyPath: m_Name
       value: 'Sprinkler '
