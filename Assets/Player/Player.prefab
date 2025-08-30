@@ -955,6 +955,8 @@ MonoBehaviour:
   attackRadius: 1
   attackCooldown: 1
   rotateSpeed: 200
+  playerSoundManager: {fileID: 0}
+  enemiesSoundManager: {fileID: 0}
 --- !u!114 &-6161300530798987367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -969,6 +971,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxLives: 3
   CurrentLives: 0
+  isInvincible: 0
+  screenShake: {fileID: 0}
+  Enemy1: {fileID: 0}
+  Enemy2: {fileID: 0}
+  freezeFrame: {fileID: 0}
+  playerSoundManager: {fileID: 0}
+  enemiesSoundManager: {fileID: 0}
 --- !u!1 &5300912525952913606
 GameObject:
   m_ObjectHideFlags: 0

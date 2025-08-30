@@ -81,28 +81,43 @@ public class PlayerMovement : MonoBehaviour
         //Ataque con click izquierdo
         if (Input.GetKeyDown(KeyCode.Mouse0) && canAttack)
         {
+            Debug.Log("Attack");
             canAttack = false;
             //animator.SetTrigger("Attack");
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRadius); 
             foreach (var col in hitColliders)
             {
-                if (col.CompareTag("Enemy") || col.CompareTag("Box")) //Cualquier Objeto con el tag "Enemy" o "Box" será destruido al ser atacado
+                if (col.CompareTag("Enemy")) //Cualquier Objeto con el tag "Enemy" o "Box" será destruido al ser atacado
                 {
                     if(col.gameObject.layer == 6)
                     {
-                        enemiesSoundManager?.PlayRandomPitch("HenDamage");
+                        enemiesSoundManager?.PlayRandomPitch("HenDamage");//Simple Enemy
                     }
                     else if (col.gameObject.layer == 7)
                     {
-                        enemiesSoundManager?.PlayRandomPitch("DogDamage");
+                        enemiesSoundManager?.PlayRandomPitch("DogDamage"); //Complex Enemy
                     }
                     else if (col.gameObject.layer == 8)
                     {
-                        enemiesSoundManager?.PlayRandomPitch("Boxes");
+                        enemiesSoundManager?.PlayRandomPitch("Boxes"); //Sentinel Enemy
                     }
-                    Destroy(col.gameObject);
+                    col.gameObject.SetActive(false);
+                    //Destroy(col.gameObject);
                     Debug.Log("Jugador Destruyo a: " + col.name);
                 }
+
+                if (col.CompareTag("Box"))
+                {
+                    col.gameObject.GetComponent<CajasRompibles>().TakeDamage(1);
+                    playerSoundManager?.PlayRandomPitch("Boxes");
+                    col.GetComponent<CajasRompibles>().SpawnLoot();
+                    // Rebote adicional al romper la caja
+                    velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                    col.gameObject.SetActive(false);                  
+                    //Destroy(col.gameObject);
+                }
+
+                        
             }
             StartCoroutine(ResetAttackCooldown());
 
@@ -139,18 +154,19 @@ public class PlayerMovement : MonoBehaviour
             GetComponent<IngameUIUpdate>().ChangeShieldState();
         }
 
-        CajasRompibles caja = hit.collider.GetComponent<CajasRompibles>();
+        //CajasRompibles caja = hit.collider.GetComponent<CajasRompibles>();
 
-        if (caja != null)
-        {
-            if (velocity.y < -1f)
-            {
-                caja.TakeDamage(1);
-                playerSoundManager?.PlayRandomPitch("Boxes");
-
-                // Rebote adicional al romper la caja
-                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            }
-        }
+        //if (caja != null)
+        //{
+        //    if (velocity.y < -1f)
+        //    {
+        //        caja.TakeDamage(1);
+        //        playerSoundManager?.PlayRandomPitch("Boxes");
+        //        caja.GetComponent<CajasRompibles>().SpawnLoot();
+        //        // Rebote adicional al romper la caja
+        //        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        //        caja.gameObject.SetActive(false);
+        //    }
+        //}
     }
 }
