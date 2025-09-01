@@ -137,7 +137,7 @@ public class PlayerMovement : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRadius);
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    private void OnTriggerEnter(Collider hit)
     {
         if (hit.gameObject.CompareTag("Fish"))
         {
