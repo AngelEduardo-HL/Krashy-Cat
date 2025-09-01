@@ -36,45 +36,41 @@ public class PlayerMovement : MonoBehaviour
 
     void PlayerMove()
     {
-        //Movimiento
-        Vector3 inputDir = Vector3.zero;
+        // Dirección de movimiento según input
+        Vector3 inputDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        inputDir = inputDir.normalized;
 
-        float turnInput = Input.GetAxis("Horizontal");
-        transform.Rotate(0f, turnInput * rotateSpeed * Time.deltaTime, 0f);
+        // Movimiento
+        Vector3 move = inputDir * speed;
 
-        float forwardInput = Input.GetAxis("Vertical");
-        Vector3 move = transform.forward * forwardInput * speed;
-
-        bool isWalking = Mathf.Abs(forwardInput) > 0.1f;
-
-        if (Input.GetKey(KeyCode.Space) && controller.isGrounded)
-        {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            playerSoundManager?.PlayRandomPitch("Jump");
-        }
-
-
+        // Rotación automática hacia la dirección de movimiento
         if (inputDir.sqrMagnitude > 0.01f)
         {
             Quaternion targetRot = Quaternion.LookRotation(inputDir);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, rotateSpeed * Time.deltaTime);
         }
 
-        if (controller.isGrounded && velocity.y < 0f)
-            velocity.y = -1f;
+        // Saltar
+        if (Input.GetKey(KeyCode.Space) && controller.isGrounded)
         {
-            velocity.y += gravity * Time.deltaTime;
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            playerSoundManager?.PlayRandomPitch("Jump");
         }
 
+        // Gravedad
+        if (controller.isGrounded && velocity.y < 0f)
+            velocity.y = -1f;
 
+        velocity.y += gravity * Time.deltaTime;
+
+        // Aplicar movimiento
         controller.Move((move + velocity) * Time.deltaTime);
 
-        //Animaciones
-        bool running = controller.isGrounded && Mathf.Abs(forwardInput) > 0.1f;
+        // Animaciones
+        bool running = controller.isGrounded && inputDir.sqrMagnitude > 0.1f;
         bool jumping = !controller.isGrounded;
         animator.SetBool("Running", running);
         animator.SetBool("Jumping", jumping);
-        //Idle se activa cuando el Running y Jumping son falsos pa no hacer tanto desmadre
     }
     void PlayerAttack()
     {
@@ -84,12 +80,12 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Attack");
             canAttack = false;
             //animator.SetTrigger("Attack");
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRadius); 
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRadius);
             foreach (var col in hitColliders)
             {
                 if (col.CompareTag("Enemy")) //Cualquier Objeto con el tag "Enemy" o "Box" será destruido al ser atacado
                 {
-                    if(col.gameObject.layer == 6)
+                    if (col.gameObject.layer == 6)
                     {
                         enemiesSoundManager?.PlayRandomPitch("HenDamage");//Simple Enemy
                     }
@@ -113,11 +109,11 @@ public class PlayerMovement : MonoBehaviour
                     col.GetComponent<CajasRompibles>().SpawnLoot();
                     // Rebote adicional al romper la caja
                     velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-                    col.gameObject.SetActive(false);                  
+                    col.gameObject.SetActive(false);
                     //Destroy(col.gameObject);
                 }
 
-                        
+
             }
             StartCoroutine(ResetAttackCooldown());
 
@@ -153,25 +149,9 @@ public class PlayerMovement : MonoBehaviour
             playerSoundManager?.PlayRandomPitch("Fish"); //Se le va a agregar un sonido diferente
             GetComponent<IngameUIUpdate>().ChangeShieldState();
         }
-
-        //CajasRompibles caja = hit.collider.GetComponent<CajasRompibles>();
-
-        //if (caja != null)
-        //{
-        //    if (velocity.y < -1f)
-        //    {
-        //        caja.TakeDamage(1);
-        //        playerSoundManager?.PlayRandomPitch("Boxes");
-        //        caja.GetComponent<CajasRompibles>().SpawnLoot();
-        //        // Rebote adicional al romper la caja
-        //        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        //        caja.gameObject.SetActive(false);
-        //    }
-        //}
     }
     public void ResetVerticalVelocity()
     {
-        // 'velocity' ya existe en tu script
         // un empuje leve hacia abajo mantiene el contacto con el suelo
         var v = typeof(PlayerMovement)
                 .GetField("velocity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
