@@ -108,7 +108,6 @@ public class PlayerMovement : MonoBehaviour
 
                 if (col.CompareTag("Box"))
                 {
-                    col.gameObject.GetComponent<CajasRompibles>().TakeDamage(1);
                     playerSoundManager?.PlayRandomPitch("Boxes");
                     col.GetComponent<CajasRompibles>().SpawnLoot();
                     // Rebote adicional al romper la caja
@@ -137,7 +136,8 @@ public class PlayerMovement : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRadius);
     }
 
-    private void OnTriggerEnter(Collider hit)
+
+    public void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.CompareTag("Fish"))
         {
@@ -153,22 +153,8 @@ public class PlayerMovement : MonoBehaviour
             playerSoundManager?.PlayRandomPitch("Fish"); //Se le va a agregar un sonido diferente
             GetComponent<IngameUIUpdate>().ChangeShieldState();
         }
-
-        //CajasRompibles caja = hit.collider.GetComponent<CajasRompibles>();
-
-        //if (caja != null)
-        //{
-        //    if (velocity.y < -1f)
-        //    {
-        //        caja.TakeDamage(1);
-        //        playerSoundManager?.PlayRandomPitch("Boxes");
-        //        caja.GetComponent<CajasRompibles>().SpawnLoot();
-        //        // Rebote adicional al romper la caja
-        //        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        //        caja.gameObject.SetActive(false);
-        //    }
-        //}
     }
+
     public void ResetVerticalVelocity()
     {
         // 'velocity' ya existe en tu script

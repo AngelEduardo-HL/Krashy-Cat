@@ -11,7 +11,6 @@ public class SentinelEnemy : MonoBehaviour
     private float waitTimer;
     private bool sprinkleOn;
 
-    public SoundManager enemiesSoundManager;
 
     void Start()
     {
@@ -56,7 +55,6 @@ public class SentinelEnemy : MonoBehaviour
         }
         animator.SetBool("Active", true);
         GetComponent<Collider>().enabled = true;
-        enemiesSoundManager.PlaySound("Sprinkler");
     }
 
     void DesactiveSprinkler() //Se desactivan aspersores
@@ -68,7 +66,6 @@ public class SentinelEnemy : MonoBehaviour
         }
         animator.SetBool("Active", false);
         GetComponent<Collider>().enabled = false;
-        enemiesSoundManager.StopSound("Sprinkler");
     }
 
 }
