@@ -6,12 +6,14 @@ using System;
 public class PlayerHP : MonoBehaviour
 {
     [Header("Vidas")]
-    public int initialLives = 3;
-    public int currentLives;
+    public int MaxLives = 3;
+    public int CurrentLives;
     public bool isInvincible = false;
 
     [Header("Screen Shake")]
     public ScreenShake screenShake;
+    public GameObject Enemy1;
+    public GameObject Enemy2;
 
     [Header("FreezeFrame")]
     public FreezeFrame freezeFrame;
@@ -20,27 +22,17 @@ public class PlayerHP : MonoBehaviour
     public SoundManager playerSoundManager;
     public SoundManager enemiesSoundManager;
 
-    [Header("Shield")]
-    public GameObject shieldPrefab;
-    bool isShieldActive;
 
     void Start()
     {
-        currentLives = initialLives;
+        CurrentLives = MaxLives;
 
     }
 
     public void TakeDamage() //Servira aqui mas a delante para actualizar el UI
     {
-        if (isShieldActive)
-        {
-            shieldPrefab.SetActive(false);
-            isInvincible = false;
-            isShieldActive = false;
-            return;
-        }
         if (isInvincible ) return; //Si el jugador es invencible, no se le quita vida
-        currentLives--;
+        CurrentLives--;
         isInvincible  = true; //Para que no lo mate de un vergazo
 
         Invoke(nameof(ResetInvincibility), 2f); //El jugador sera invencible por 2 segundos
@@ -50,69 +42,68 @@ public class PlayerHP : MonoBehaviour
             freezeFrame.FreezeTime(); //Congela el tiempo por unos segundos
         }
 
-        if (currentLives <= 0)
+        if (CurrentLives <= 0)
         {
-            currentLives = 0;
+            CurrentLives = 0;
             Time.timeScale = 1; //Asegura que el tiempo se reanude al morir
             SceneManager.LoadScene("DeathScene"); //Cuando las vidas son 0 se carga la Escena de muerte
         }
 
         CheckpointManager.Instance?.RespawnPlayer(gameObject); //Respawnea al jugador en el ultimo checkpoint
-        
+
+        //Screen Shake segun que enemigo colisiona con el jugador
+        if (Enemy1.activeInHierarchy) //Si el enemigo 1 esta activo
+        {
+            screenShake.ShakeCamera(0.3f, 1.5f, 1.5f); //Sacude la camara por 0.2 segundos con amplitud y frecuencia de 1
+        }
+        else if (Enemy2.activeInHierarchy) //Si el enemigo 2 esta activo
+        {
+            screenShake.ShakeCamera(0.5f, 4f, 4f); //Sacude la camara por 0.3 segundos
+        }
     }
 
-    public void ActiveInvincible()
-    {
-        isShieldActive = true;
-        shieldPrefab.SetActive(true);
-        shieldPrefab.gameObject.GetComponent<Shield>().ActiveShield();
-        isInvincible = true;
-    }
-
-    public void OnControllerColliderHit(ControllerColliderHit hit)
+    //Para colisiones Fisicas Hitbox
+    private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.CompareTag("Enemy"))
         {
-            TakeDamage();
-            if (hit.gameObject.layer == 6)
-            {
-                screenShake.ShakeCamera(0.3f, 1.5f, 1.5f);
-                enemiesSoundManager?.PlayRandomPitch("HenAttack");
-            }
-            else if (hit.gameObject.layer == 7)
-            {
-                screenShake.ShakeCamera(0.5f, 4f, 4f);
-                enemiesSoundManager?.PlayRandomPitch("DogAttack");
-            }
-            else if (hit.gameObject.layer == 8)
-            {
-                screenShake.ShakeCamera(0.8f, 5f, 5f);
-                Debug.Log("Sprinkler");
-            }
-            
+            TakeDamage(); //Si el jugador colisiona con un enemigo, se le quita una vida
         }
+    }
 
-        if (hit.gameObject.layer == 11)
+    //Para colisiones con IsTrigger (No fisicas)
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
         {
-            currentLives++;
-            hit.gameObject.SetActive(false);
-            Debug.Log("HP interact");
+            TakeDamage(); //Si el jugador entra en el trigger de un enemigo, se le quita una vida
         }
+    }
 
-        if (hit.gameObject.layer == 12)
+    private void OnCollisionEnter(Collision other)
+    {
+        if(other.gameObject.layer == 6)
         {
-            ActiveInvincible();
+            enemiesSoundManager?.PlayRandomPitch("HenAttack");
+        }
+        else if (other.gameObject.layer == 7)
+        {
+            enemiesSoundManager?.PlayRandomPitch("DogAttack");
+        }
+        else if (other.gameObject.layer == 8)
+        {
+            Debug.Log("Sprinkler");
         }
     }
 
     public int GetCurrentLives() //Para que otros scripts puedan acceder a las vidas actuales del jugador
     {
-        return currentLives;
+        return CurrentLives;
     }
 
     public void ResetLives()
     {
-        currentLives = initialLives;
+        CurrentLives = MaxLives;
     }
 
     private void ResetInvincibility()
@@ -121,7 +112,7 @@ public class PlayerHP : MonoBehaviour
     }
     public void AddLife(int amount = 1)
     {
-        currentLives = Mathf.Clamp(currentLives + amount, 0, initialLives);
+        CurrentLives = Mathf.Clamp(CurrentLives + amount, 0, MaxLives);
         
     }
 }

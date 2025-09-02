@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 5570089842559854307}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.138, y: -4.776, z: 2.246}
-  m_LocalScale: {x: 0.39896, y: 0.39896, z: 0.39896}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.07, y: 0.07, z: 0.07}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5570089842559854307}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -2432090755550338912, guid: 05b42aa582c152c4787cdd12cc5df334, type: 3}
 --- !u!23 &8068950036749973243
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 352a1153dab17ae4eb60a7479439e6b9, type: 2}
+  - {fileID: 2100000, guid: 6e9b469f5f7fe1742a470afbb3817a22, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -107,8 +107,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 8.353892, y: 8.1454735, z: 14.523007}
+  m_Center: {x: -0.19440481, y: 3.5727348, z: 2.9064066}
 --- !u!114 &5167135602657235159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,6 +122,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  fishPrefab: {fileID: 8494495309977440784, guid: d2f781e1970d85442909f604bb5ac271, type: 3}
-  maskPrefab: {fileID: 6068942103388250185, guid: 16985f826e4122c439da6e1e6310ec87, type: 3}
-  hpPrefab: {fileID: 988667183279677667, guid: f441eedc6047a8b49bc93e20f61cfc16, type: 3}
+  fishPrefab: {fileID: 6865037984877945618, guid: 2cda766ee195cd04a978d2f44b85b15a, type: 3}
+  maskPrefab: {fileID: 6278195096280296806, guid: 714a393a031527c43abca31c75fccdcd, type: 3}
+  hpPrefab: {fileID: 9069719319595522449, guid: 987248552a5e95345bea4a8962bf7e9c, type: 3}
