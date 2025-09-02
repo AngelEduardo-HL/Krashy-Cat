@@ -18,7 +18,8 @@ public class Pausa : MonoBehaviour
     {
         gamePaused = false;
         canvasGroup.alpha = 0;
-        uiSoundManager?.FadeInSound("GameMusic", 2);
+        uiSoundManager.PlaySound("GameMusic");
+        //uiSoundManager?.FadeInSound("GameMusic", 2);
     }
 
 
@@ -71,6 +72,13 @@ public class Pausa : MonoBehaviour
     }
 
 
-
+    public void PressButtonSound()
+    {
+        uiSoundManager.PlaySound("ButtonClick");
+    }
+    public void HoverButtonSound()
+    {
+        uiSoundManager.PlaySound("ButtonHover");
+    }
 
 }

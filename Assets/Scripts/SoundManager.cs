@@ -30,7 +30,7 @@ public class SoundManager : MonoBehaviour
     public void FadeInSound(string name, float fadeTime)
     {
         Sound sound = FindSound(name);
-        sound.audioSource.volume = 0;
+        sound.audioSource.volume = 1;
         sound.audioSource.Play();
         sound.audioSource.DOFade(sound.volume, fadeTime).SetUpdate(true);
     }
@@ -83,6 +83,7 @@ public class Sound
     public float volume;
     public float pitch;
     public bool loop;
+    public bool playOnAwake;
 
     public AudioMixerGroup mixerGroup;
 
@@ -96,6 +97,7 @@ public class Sound
         this.audioSource.volume = volume;
         this.audioSource.pitch = pitch;
         this.audioSource.loop = loop;
+        this.audioSource.playOnAwake = playOnAwake;
         this.audioSource.outputAudioMixerGroup = mixerGroup;
     }
 }
