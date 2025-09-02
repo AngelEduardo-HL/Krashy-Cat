@@ -42,10 +42,7 @@ public class PlayerHP : MonoBehaviour
             isShieldActive = false;
             return;
         }
-        //if (isInvincible)
-        //{
-        //    return; //Si el jugador es invencible, no se le quita vida
-        //}
+   
         
         currentLives--;
         healthText.text = ("" + currentLives);
@@ -106,6 +103,7 @@ public class PlayerHP : MonoBehaviour
         if (hit.gameObject.layer == 11)
         {
             currentLives++;
+            healthText.text = ("" + currentLives);
             playerSoundManager?.PlayRandomPitch("Life");
             hit.gameObject.SetActive(false);
             Debug.Log("HP interact");
