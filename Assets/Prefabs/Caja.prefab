@@ -122,6 +122,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  fishPrefab: {fileID: 6865037984877945618, guid: 2cda766ee195cd04a978d2f44b85b15a, type: 3}
-  maskPrefab: {fileID: 6278195096280296806, guid: 714a393a031527c43abca31c75fccdcd, type: 3}
-  hpPrefab: {fileID: 9069719319595522449, guid: 987248552a5e95345bea4a8962bf7e9c, type: 3}
+  fishPrefab: {fileID: 8494495309977440784, guid: d2f781e1970d85442909f604bb5ac271, type: 3}
+  maskPrefab: {fileID: 6068942103388250185, guid: 16985f826e4122c439da6e1e6310ec87, type: 3}
+  hpPrefab: {fileID: 988667183279677667, guid: f441eedc6047a8b49bc93e20f61cfc16, type: 3}
